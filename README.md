@@ -65,7 +65,7 @@ After you have enough data, call `psram-log-parser.py` which parses the logfile 
 Then call `plot.py` to generate a plot.
 
 Above example woulds show this:
-![Plot of above example](example.png)
+![Plot of above example](data/example.png)
 
 Another example of the PSRAM usage in the [AI on the Edge Device](https://github.com/jomjol/AI-on-the-edge-device) project:
-![Full Example od usage in AI on the Edge Device](example2.png)
+![Full Example od usage in AI on the Edge Device](data/example2.png)
