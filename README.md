@@ -1,4 +1,4 @@
-# psram-usage-visualizer
+# PSRAM Usage Visualizer
 This is a tool to visualize the PSRAM usage on a ESP IDF project.
 
 For it to work on ESP IDF 4.4, you need to patch the
