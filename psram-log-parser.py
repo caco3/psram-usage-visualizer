@@ -23,12 +23,13 @@ ALLOC = 1
 USED = 2
 FREE = 3
 
-print(args)
 index = -1
 actions = []
 
+logLine = 0
 with open(args.logfile.name) as file:
     for line in file:
+        logLine += 1
         line = line[:-1]
 
         #print(index, line)
@@ -36,7 +37,7 @@ with open(args.logfile.name) as file:
             index += 1
             data = line.split(" ")
             actions.append([])
-            actions[index].append([ALLOC, int(data[2][:-1], 16), data[3]])
+            actions[index].append([ALLOC, int(data[2][:-1], 16), data[3], logLine])
         elif "PSRAM FREE" in line:
             index += 1
             data = line.split(" ")
@@ -56,8 +57,7 @@ with open(args.logfile.name) as file:
                 #raise Exception("MALLOC for address 0x%08X not found!" % free_address)
                 print("MALLOC for free @ address 0x%X not found!" % free_address)
 
-
-            actions[index].append([FREE, int(data[2], 16), size])
+            actions[index].append([FREE, int(data[2], 16), size, logLine])
         else:
             if index < 0:
                 continue
@@ -137,7 +137,16 @@ index = 0
 with open(exportfile, 'w') as f:
     writer = csv.writer(f)
 
-    # Header
+    # Header lines
+    # Line 1 = line number in log file
+    header = []
+    for a in range(len(actions)):
+        header.append(actions[a][0][3])
+
+    writer.writerow(header)
+
+
+    # Line 2 = Malloc size in Bytes
     header = []
     for a in range(len(actions)):
         #print(actions[a][0])
@@ -146,7 +155,7 @@ with open(exportfile, 'w') as f:
         else:
             header.append("")
 
-    #writer.writerow(header)
+    writer.writerow(header)
 
     # Data
     for a in range(len(actions)):
@@ -170,4 +179,4 @@ with open(exportfile, 'w') as f:
 #print("slots:", len(slots))
 print("actions:", len(actions))
 
-print("table exported to ", exportfile)
+print("table exported to", exportfile)
