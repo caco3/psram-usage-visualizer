@@ -26,56 +26,68 @@ FREE = 3
 index = -1
 actions = []
 
+# try:
 logLine = 0
 with open(args.logfile.name) as file:
     for line in file:
         logLine += 1
         line = line[:-1]
 
-        #print(index, line)
+        # print()
+        # print(index, line)
         if "PSRAM MALLOC" in line:
             index += 1
             data = line.split(" ")
             actions.append([])
             actions[index].append([ALLOC, int(data[2][:-1], 16), data[3], logLine])
         elif "PSRAM FREE" in line:
-            index += 1
             data = line.split(" ")
-            actions.append([])
+            # print(data)
 
-            # Unwind MALLOC stack to find mALLOC of freed address and extract size
+            # Unwind MALLOC stack to find MALLOC of freed address and extract size
             size = None
             #print(line)
-            for u in range(index-1, 0, -1):
-                free_address = int(data[2], 16)
-                #print(u, actions[u], actions[u][0])
-                if free_address == actions[u][0][1]:
-                    size = actions[u][0][2]
+            free_address = int(data[2], 16)
+            # print(free_address)
+            for u in range(index, 0, -1):
+                # print(u, actions[u], actions[u][0])
+                if u in actions:
+                    if free_address == actions[u][0][1]:
+                        size = actions[u][0][2]
+                        break
+                else:
+                    print("Warning: Index %d not found in database!" % u)
                     break
 
             if size == None:
                 #raise Exception("MALLOC for address 0x%08X not found!" % free_address)
-                print("MALLOC for free @ address 0x%X not found!" % free_address)
+                if free_address:
+                    print("Warning: MALLOC for free @ address 0x%X not found!" % free_address)
+                continue
 
+            index += 1
+            actions.append([])
             actions[index].append([FREE, int(data[2], 16), size, logLine])
         else:
             if index < 0:
                 continue
 
             actions[index].append(line.replace("PSRAM MALLOC ", str(ALLOC)))
-
+# except Exception as e:
+#     print("Failed to parse logfile on line %d. Line: \"%s\", error: %s" % (logLine, line, e))
+#     print("This is mostly due to a lost newline.")
 
 print("malloc/free actions:", index)
 
 
 
-#pprint.pprint(actions[:20])
+# pprint.pprint(actions[:500])
 #exit()
 
 slots = [] * divisions
 
 
-#print("--------------")
+print("--------------")
 
 current_slot_usage = [0] * divisions
 
@@ -83,7 +95,7 @@ index = 0
 for action in actions:
     slots.append(current_slot_usage) # Use the usage of the previous round as default
 
-    #print(action[0])
+    # print(action)
     if action[0][0] == ALLOC: # MALLOC
         first_slot = int(math.floor(float(action[0][1]-start_adress) / division_size))
         last_slot = first_slot + int(math.ceil(float(action[0][2]) / division_size)) + 1

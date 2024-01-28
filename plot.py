@@ -29,10 +29,11 @@ cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ["white", "red", 
 
 plt.imshow(data, cmap=cmap, aspect="auto")
 plt.grid(True)
-#plt.grid(False)
+plt.grid(False)
 
 xDivider = math.floor(len(logLineNumbers)/40)
 #xDivider = 1
+#xDivider = 50
 
 xticks = np.arange(0, len(logLineNumbers))
 plt.yticks(np.arange(0, divisions, divisions/4), np.arange(0, 4, 16*divisions/4096))
