@@ -20,7 +20,7 @@ In `heap_caps_free()` add following before `if (esp_ptr_in_diram_iram(ptr)) {`:
 
 Then build your firmware and let it run.
 
-Log the console output into a file.
+Log the console output into a file with the extention `.log`.
 It will look like this:
 ```
 I (3849) cam_hal: buffer_size: 32768, half_buffer_size: 4096, node_buffer_size: 2048, node_cnt: 16, total_cnt: 15
