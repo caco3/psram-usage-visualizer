@@ -59,7 +59,7 @@ PSRAM MALLOC 0x3fa23718, 53328
 PSRAM MALLOC 0x3fa3076c, 512
 ```
 
-The tool only uses the `` and `` lines. The other lines will be ignored but are helpful as references.
+The tool only uses the `PSRAM MALLOC` and `PSRAM MALLOC` lines. The other lines will be ignored but are helpful as references.
 
 After you have enough data, call `psram-log-parser.py` which parses the logfile and generates a csv table.
 Then call `plot.py` to generate a plot.
