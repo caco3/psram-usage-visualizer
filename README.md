@@ -2,7 +2,7 @@
 This is a tool to visualize the PSRAM usage on a ESP IDF project.
 
 For it to work on ESP IDF 4.4, you need to patch the
-`.platformio/packages/framework-espidf@3.40402.0/components/heap/heap_caps.c` file:
+`.platformio/packages/framework-espidf/components/heap/heap_caps.c` file:
 In `heap_caps_malloc()` add following before the return:
 ```c
     if ((caps & MALLOC_CAP_SPIRAM) == MALLOC_CAP_SPIRAM) {
